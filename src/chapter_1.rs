@@ -1,4 +1,8 @@
 // https://learnku.com/docs/nomicon/2018/21-repr/4708
+// https://nomicon.purewhite.io/repr-rust.html
+// https://doc.rust-lang.org/nomicon/exotic-sizes.html
+
+// 2. Data Layout - repr(Rust)
 
 use std::mem;
 
