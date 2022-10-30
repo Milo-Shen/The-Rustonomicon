@@ -25,6 +25,8 @@ use std::mem;
 // Trait 对象代表某种类型，实现了它所指定的 Trait。确切的原始类型被删除，以利于运行时的反射，其中包含使用该类型的所有必要信息的 vtable。
 // 补全 Trait 对象指针所需的信息是 vtable 指针，被指向的对象的运行时的大小可以从 vtable 中动态地获取。
 
+// 一个 slice 只是一些只读的连续存储——通常是一个数组或Vec。补全一个 slice 指针所需的信息只是它所指向的元素的数量，指针的运行时大小只是静态已知元素的大小乘以元素的数量。
+
 struct A<'a> {
     _a: i32,
     _b: &'a [u8],
@@ -34,7 +36,7 @@ trait MyTrait {
     fn test();
 }
 
-pub fn run() {
+pub fn dst() {
     let array: [u8; 10] = [1; 10];
     let s = &array[..];
 
@@ -55,4 +57,26 @@ pub fn run() {
         mem::size_of::<A>(),
         mem::size_of::<&A>()
     );
+
+    // 结构实际上可以直接存储一个 DST 作为其最后一个字段，但这也会使它们自身成为一个 DST:
+
+    // 不能直接存储在栈上
+    struct MySuperSlice {
+        info: u32,
+        data: [u8],
+    }
+
+    // 如果这样的类型没有方法来构造它，那么它在很大程度上来看是没啥用的。目前，唯一支持的创建自定义 DST 的方法是使你的类型成为泛型，并执行非固定大小转换（unsizing coercion）:
+    struct MySuperSliceable<T: ?Sized> {
+        info: u32,
+        data: T,
+    }
+
+    let sized: MySuperSliceable<[u8; 8]> = MySuperSliceable {
+        info: 17,
+        data: [0; 8],
+    };
+
+    let dynamic: &MySuperSliceable<[u8]> = &sized;
+    println!("{} {:?}", dynamic.info, &dynamic.data);
 }
