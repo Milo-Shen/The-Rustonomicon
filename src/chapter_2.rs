@@ -13,3 +13,6 @@
 // Rust 暴露了两种主要的 DST 类型：
 // 1. trait objects: dyn MyTrait
 // 2. slices：[T]、str及其他
+
+// Trait 对象代表某种类型，实现了它所指定的 Trait。确切的原始类型被删除，以利于运行时的反射，其中包含使用该类型的所有必要信息的 vtable。
+// 补全 Trait 对象指针所需的信息是 vtable 指针，被指向的对象的运行时的大小可以从 vtable 中动态地获取。
