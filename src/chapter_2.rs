@@ -1,3 +1,5 @@
+use std::mem;
+
 // Exotically Sized Types
 // https://doc.rust-lang.org/nomicon/exotic-sizes.html
 // https://nomicon.purewhite.io/exotic-sizes.html
@@ -23,7 +25,34 @@
 // Trait 对象代表某种类型，实现了它所指定的 Trait。确切的原始类型被删除，以利于运行时的反射，其中包含使用该类型的所有必要信息的 vtable。
 // 补全 Trait 对象指针所需的信息是 vtable 指针，被指向的对象的运行时的大小可以从 vtable 中动态地获取。
 
-struct MySuperSlice {
-    info: u32,
-    data: [u8],
+struct A<'a> {
+    _a: i32,
+    _b: &'a [u8],
+}
+
+trait MyTrait {
+    fn test();
+}
+
+pub fn run() {
+    let array: [u8; 10] = [1; 10];
+    let s = &array[..];
+
+    println!("s zise = {}", mem::size_of_val(s));
+    println!("&s zise = {}", mem::size_of_val(&s));
+    println!(
+        "i32 size = {}, &i32 size = {}",
+        mem::size_of::<i32>(),
+        mem::size_of::<&i32>()
+    );
+    println!(
+        "i64 size = {}, &i64 size = {}",
+        mem::size_of::<i64>(),
+        mem::size_of::<&i64>()
+    );
+    println!(
+        "A size = {}, &A size = {}",
+        mem::size_of::<A>(),
+        mem::size_of::<&A>()
+    );
 }
