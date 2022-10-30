@@ -120,7 +120,13 @@ struct LotsOfNothing {
 // 请注意，对 ZST 的引用（包括空片），就像所有其他的引用一样，必须是非空的，并且适当地对齐。解引用 ZST 的空指针或未对齐指针是未定义的行为，就像其他类型的引用一样。
 pub fn zst() {
     println!(
-        "A size = {}, &A size = {}",
+        "Nothing size = {}, &Nothing size = {}",
+        mem::size_of::<Nothing>(),
+        mem::size_of::<&Nothing>()
+    );
+
+    println!(
+        "LotsOfNothing size = {}, &LotsOfNothing size = {}",
         mem::size_of::<Nothing>(),
         mem::size_of::<&Nothing>()
     );
