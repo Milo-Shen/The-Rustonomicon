@@ -27,11 +27,11 @@
 // 枚举
 // 大部分枚举类型的布局如下面的例子:
 
-// enum Foo {
-//     A(u32),
-//     B(u64),
-//     C(u8),
-// }
+enum Foo {
+    A(u32),
+    B(u64),
+    C(u8),
+}
 
 // // 布局为:
 // struct FooRepr{
@@ -62,4 +62,6 @@ pub fn repr() {
     println!("struct A size = {}", mem::size_of::<A>());
     println!("struct B size = {}", mem::size_of::<B>());
     println!("size of variable a = {}", mem::size_of_val(&a));
+    println!("enum Foo size = {}", mem::size_of::<Foo>());
+    println!("enum &Foo size = {}", mem::size_of::<&Foo>());
 }
