@@ -34,11 +34,29 @@ use std::mem;
 // 另外，通过 FFI 传递结构，其中内部字段类型在另一端被期望，这保证了结构的工作。特别是，这对于struct Foo(f32)总是具有与f32相同的 ABI 是必要的。
 // 只有在唯一的字段为 pub 或其内存布局在文档中所承诺的情况下，该 repr 才被视为一个类型的公共 ABI 的一部分。否则，该内存布局不应被其他 crate 所依赖。
 
+enum MyOption<T> {
+    Some(T),
+    None,
+}
+
+#[repr(u8)]
+enum MyReprOption<T> {
+    Some(T),
+    None,
+}
+
 pub fn run() {
     struct A {
-        _a: i8,
+        _a: u8,
         _b: i32,
-        _c: i16,
+        _c: u8,
+    }
+
+    #[repr(C)]
+    struct B {
+        _a: u8,
+        _b: i32,
+        _c: u8,
     }
 
     println!(
@@ -47,4 +65,9 @@ pub fn run() {
         mem::size_of::<i16>(),
         mem::size_of::<A>(),
     );
+
+    println!("B size = {}", mem::size_of::<B>());
+
+    // assert_eq!(8, size_of::<MyOption<&u16>>());
+    // assert_eq!(16, size_of::<MyReprOption<&u16>>());
 }
