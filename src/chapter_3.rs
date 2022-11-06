@@ -78,4 +78,12 @@ pub fn repr_c() {
         _d: D,
     }
     println!("E size = {}", mem::size_of::<E>());
+
+    enum MyType {
+        First,
+        Second,
+    }
+
+    // repr(C) 和 repr(u*) 中无成员的枚举不能被赋值为一个没有对应变量的整数, 但是 C\C++ 中可以
+    // let b: i32 = MyType::First;
 }
