@@ -9,7 +9,7 @@ use std::mem;
 //  1. 但是 ZST 类型大小仍然是 0
 //  2. DST 类型不是 FFI 安全的
 //  3. 如果 T 是一个 FFI 安全的类型, 那么 Option<T> 和 T 拥有同样的布局, 也是安全的
-//  4. repr(C) 和 repr(u*) 中无成员的枚举不能被赋值为一个没有对应变量的整数, 但是 C \ C++ 中可以
+//  4. repr(C) 和 repr(u*) 中无成员的枚举不能被赋值为一个没有对应变量的整数, 但是 C\C++ 中可以
 
 // repr(transparent): 这只能用于具有某个非零大小字段 ( 可能还有其他零大小字段 ) 的结构。其效果是保证整个结构的布局和 ABI 与该字段相同
 // repr(u*) 或 repr(i*)
@@ -45,7 +45,7 @@ enum MyReprOption<T> {
     None,
 }
 
-pub fn run() {
+pub fn repr_c() {
     struct A {
         _a: u8,
         _b: i32,
@@ -68,6 +68,14 @@ pub fn run() {
 
     println!("B size = {}", mem::size_of::<B>());
 
-    // assert_eq!(8, size_of::<MyOption<&u16>>());
-    // assert_eq!(16, size_of::<MyReprOption<&u16>>());
+    struct C;
+    struct D;
+
+    // ZST 的类型大小仍然是 0
+    #[repr(C)]
+    struct E {
+        _c: C,
+        _d: D,
+    }
+    println!("E size = {}", mem::size_of::<E>());
 }
