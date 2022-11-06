@@ -79,6 +79,7 @@ pub fn repr_c() {
     }
     println!("E size = {}", mem::size_of::<E>());
 
+    #[repr(C)]
     enum MyType {
         First,
         Second,
